@@ -16,6 +16,11 @@ builder.Services.AddCors(p => p.AddPolicy("corsapp", builder =>
     builder.WithOrigins("*").AllowAnyMethod().AllowAnyHeader();
 }));
 
+// builder.Services.AddAutoMapper(typeof(Program));
+
+builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
+
+builder.Services.AddScoped<IJwtUtils, JwtUtils>();
 builder.Services.AddScoped<IUserService, UserService>();
 
 var connectionString = builder.Configuration.GetConnectionString("Default");
@@ -24,6 +29,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
     
 });
+
+
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -46,7 +53,8 @@ app.UseCors("corsapp");
 
 app.UseAuthorization();
 
-app.UseMiddleware<AuthMiddleware>();
+app.UseMiddleware<ErrorHandlerMiddleware>();
+app.UseMiddleware<JwtMiddleware>();
 
 app.MapControllers();
 

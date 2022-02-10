@@ -3,6 +3,7 @@ using _0effort_crm_api.Core;
 using _0effort_crm_api.Models;
 using _0effort_crm_api.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 
 namespace _0effort_crm_api.Controllers
 {
@@ -12,17 +13,19 @@ namespace _0effort_crm_api.Controllers
     public class AuthController : ControllerBase
     {
         private IUserService _userService;
+        private readonly AppSettings _appSettings;
 
-        public AuthController(IUserService userService )
+        public AuthController(IUserService userService, IOptions<AppSettings> appSettings )
         {
-            this._userService = userService;
+            _userService = userService;
+            _appSettings = appSettings.Value;
         }
 
         [AllowAnonymous]
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] AuthenticateModel model)
+        public ActionResult Login([FromBody] AuthenticateModel model)
         {
-            var user = await _userService.Authenticate(model.Username, model.Password);
+            var user = _userService.Authenticate(model);
 
             if (user == null) return BadRequest(new { message = "Username or password is incorrect." });
 

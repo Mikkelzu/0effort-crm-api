@@ -9,20 +9,15 @@ namespace _0effort_crm_api.Auth
     {
         public void OnAuthorization(AuthorizationFilterContext context)
         {
-            var allowAnon = context.ActionDescriptor.EndpointMetadata.OfType<AllowAnonymousAttribute>().Any();
+            // skip authorization if action is decorated with [AllowAnonymous] attribute
+            var allowAnonymous = context.ActionDescriptor.EndpointMetadata.OfType<AllowAnonymousAttribute>().Any();
+            if (allowAnonymous)
+                return;
 
-            if (allowAnon) return;
-
-            User? user = context.HttpContext.Items["User"] as User;
-
-            if(user != null)
-            {
-                // 401 unauthorized
+            // authorization
+            var user = (User)context.HttpContext.Items["User"];
+            if (user == null)
                 context.Result = new JsonResult(new { message = "Unauthorized" }) { StatusCode = StatusCodes.Status401Unauthorized };
-
-                // set 'WWW-Authenticate' header to trigger login popup in browsers
-                context.HttpContext.Response.Headers["WWW-Authenticate"] = "Basic realm=\"\", charset=\"UTF-8\"";
-            }
         }
     }
 }
