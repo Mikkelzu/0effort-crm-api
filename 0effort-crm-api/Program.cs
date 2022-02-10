@@ -1,4 +1,6 @@
+using _0effort_crm_api.Auth;
 using _0effort_crm_api.Core;
+using _0effort_crm_api.Services;
 using Microsoft.EntityFrameworkCore;
 
 
@@ -14,6 +16,8 @@ builder.Services.AddCors(p => p.AddPolicy("corsapp", builder =>
     builder.WithOrigins("*").AllowAnyMethod().AllowAnyHeader();
 }));
 
+builder.Services.AddScoped<IUserService, UserService>();
+
 var connectionString = builder.Configuration.GetConnectionString("Default");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
@@ -28,8 +32,6 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-
-
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -43,6 +45,8 @@ app.UseHttpsRedirection();
 app.UseCors("corsapp");
 
 app.UseAuthorization();
+
+app.UseMiddleware<AuthMiddleware>();
 
 app.MapControllers();
 
