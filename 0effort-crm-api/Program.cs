@@ -1,6 +1,10 @@
 using _0effort_crm_api.Auth;
+using _0effort_crm_api.Contracts;
+using _0effort_crm_api.Contracts.DTO;
 using _0effort_crm_api.Core;
+using _0effort_crm_api.Mongo.Validators;
 using _0effort_crm_api.Services;
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 
 
@@ -23,13 +27,20 @@ builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSet
 builder.Services.AddScoped<IJwtUtils, JwtUtils>();
 builder.Services.AddScoped<IUserService, UserService>();
 
-var connectionString = builder.Configuration.GetConnectionString("Default");
+// Remove this once we figure out a way to create users in db.
+var connectionString = builder.Configuration.GetConnectionString("Local");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
     options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
-    
+
 });
 
+builder.Services.Configure<DatabaseSettings>(builder.Configuration.GetSection("MongoConnection"));
+builder.Services.AddSingleton<MongoContext>();
+builder.Services.AddScoped<IDataService, DataService>();
+
+builder.Services.AddSingleton<IValidator<CreateOrUpdateCustomerDto>, CreateOrUpdateCustomerDtoValidator>();
+builder.Services.AddSingleton<IValidator<CreateOrUpdateUserDto>, CreateOrUpdateUserDtoValidator>();
 
 
 builder.Services.AddControllers();
@@ -46,8 +57,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+// uncomment once we move to production
+//app.UseHttpsRedirection();
 
-app.UseHttpsRedirection();
+
 
 app.UseCors("corsapp");
 
