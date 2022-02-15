@@ -23,21 +23,11 @@ builder.Services.AddCors(p => p.AddPolicy("corsapp", builder =>
 // builder.Services.AddAutoMapper(typeof(Program));
 
 builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
-
-builder.Services.AddScoped<IJwtUtils, JwtUtils>();
-builder.Services.AddScoped<IUserService, UserService>();
-
-// Remove this once we figure out a way to create users in db.
-var connectionString = builder.Configuration.GetConnectionString("Local");
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-{
-    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
-
-});
+builder.Services.AddScoped<IDataService, DataService>();
 
 builder.Services.Configure<DatabaseSettings>(builder.Configuration.GetSection("MongoConnection"));
 builder.Services.AddSingleton<MongoContext>();
-builder.Services.AddScoped<IDataService, DataService>();
+
 
 builder.Services.AddSingleton<IValidator<CreateOrUpdateCustomerDto>, CreateOrUpdateCustomerDtoValidator>();
 builder.Services.AddSingleton<IValidator<CreateOrUpdateUserDto>, CreateOrUpdateUserDtoValidator>();

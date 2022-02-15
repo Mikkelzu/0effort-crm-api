@@ -1,4 +1,5 @@
-﻿using _0effort_crm_api.Entities;
+﻿
+using _0effort_crm_api.Mongo.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
@@ -15,7 +16,7 @@ namespace _0effort_crm_api.Auth
                 return;
 
             // authorization
-            var user = (User)context.HttpContext.Items["User"];
+            var user = context.HttpContext.Items["User"] as UserEntity;
             if (user == null)
                 context.Result = new JsonResult(new { message = "Unauthorized" }) { StatusCode = StatusCodes.Status401Unauthorized };
         }

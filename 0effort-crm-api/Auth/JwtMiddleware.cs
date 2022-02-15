@@ -1,4 +1,5 @@
-﻿using _0effort_crm_api.Core;
+﻿using _0effort_crm_api.Contracts.Repositories;
+using _0effort_crm_api.Core;
 using _0effort_crm_api.Services;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -16,19 +17,21 @@ namespace _0effort_crm_api.Auth
         {
             _next = next;
             _appSettings = appSettings.Value;
+            //_db = ds.Users;
+            
         }
 
-        public async Task Invoke(HttpContext context, IUserService userService)
+        public async Task Invoke(HttpContext context, IDataService ds)
         {
             var token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
 
             if (token != null)
-                AttachUserToContext(context, userService, token);
+                AttachUserToContext(context, ds, token);
 
             await _next(context);
         }
 
-        private void AttachUserToContext(HttpContext context, IUserService userService, string token)
+        private void AttachUserToContext(HttpContext context, IDataService ds, string token)
         {
             try
             {
@@ -45,10 +48,10 @@ namespace _0effort_crm_api.Auth
                 }, out SecurityToken validatedToken);
 
                 var jwtToken = (JwtSecurityToken)validatedToken;
-                var userId = int.Parse(jwtToken.Claims.First(x => x.Type == "id").Value);
+                var userId = jwtToken.Claims.First(x => x.Type == "id").Value;
 
                 // attach user to context on successful jwt validation
-                context.Items["User"] = userService.GetById(userId);
+                context.Items["User"] = ds.Users.GetSingleAsync(x => x.Id == userId);
             }
             catch
             {

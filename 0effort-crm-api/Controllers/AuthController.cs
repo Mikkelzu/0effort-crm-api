@@ -32,17 +32,6 @@ namespace _0effort_crm_api.Controllers
             _db = ds.Users;
         }
 
-        //[AllowAnonymous]
-        //[HttpPost("login")]
-        //public ActionResult Login([FromBody] AuthenticateModel model)
-        //{
-        //    var user = _userService.Authenticate(model);
-
-        //    if (user == null) return BadRequest(new { message = "Username or password is incorrect." });
-
-        //    return Ok(user);
-        //}
-
         [AllowAnonymous]
         [HttpPost("mongo/login")]
         public async Task<UserResponseModel> Login([FromBody] CreateOrUpdateUserDto model)
