@@ -33,7 +33,7 @@ namespace _0effort_crm_api.Controllers
         }
 
         [AllowAnonymous]
-        [HttpPost("mongo/login")]
+        [HttpPost("login")]
         public async Task<UserResponseModel> Login([FromBody] CreateOrUpdateUserDto model)
         {
 
@@ -73,7 +73,7 @@ namespace _0effort_crm_api.Controllers
         }
 
         [AllowAnonymous]
-        [HttpGet("/users")]
+        [HttpGet("users")]
         public IEnumerable<UserEntity> Get()
         {
             return _db.GetAll();
