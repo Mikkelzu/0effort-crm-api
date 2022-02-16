@@ -99,19 +99,19 @@ namespace _0effort_crm_api.Controllers
 
 
         [HttpGet("user/{id}")]
-        public async Task<UserEntity> GetUserById(string id)
+        public async Task<User> GetUserById(string id)
         {
             return await _db.GetUserByIdAsync(id);
         }
 
 
         [HttpGet("users")]
-        public IEnumerable<UserEntity> Get()
+        public IEnumerable<User> Get()
         {
             return _db.GetAll();
         }
 
-        private string GenerateJwtToken(UserEntity user)
+        private string GenerateJwtToken(User user)
         {
             // generate token that is valid for 7 days
             var tokenHandler = new JwtSecurityTokenHandler();

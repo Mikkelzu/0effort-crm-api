@@ -9,26 +9,26 @@ namespace _0effort_crm_api.Core.Data.Repositories
 {
     public class UserRepository : IUserRepository
     {
-        private readonly IMongoCollection<UserEntity> _users;
+        private readonly IMongoCollection<User> _users;
 
         public UserRepository(IMongoDatabase database)
         {
-            _users = database.GetCollection<UserEntity>(MongoCollectionNames.Users);
+            _users = database.GetCollection<User>(MongoCollectionNames.Users);
         }
 
-        public async Task<UserEntity> GetUserByUsernamePasswordCombo(string username, string password)
+        public async Task<User> GetUserByUsernamePasswordCombo(string username, string password)
         {
             return await GetSingleAsync(x => x.Username == username && x.Password == password);
         }
 
-        public async Task<UserEntity> GetUserByIdAsync(string userId)
+        public async Task<User> GetUserByIdAsync(string userId)
         {
             return await GetSingleAsync(x => x.Id == userId);
         }
 
         public async Task CreateUserAsync(CreateOrUpdateUserDto model)
         {
-            UserEntity user = new()
+            User user = new()
             {
                 Username = model.Username,
                 Password = model.Password,
@@ -38,33 +38,33 @@ namespace _0effort_crm_api.Core.Data.Repositories
         }
 
         #region IRepository implementation
-        public async Task AddAsync(UserEntity obj)
+        public async Task AddAsync(User obj)
         {
             await _users.InsertOneAsync(obj);
         }
 
-        public async Task DeleteAsync(Expression<Func<UserEntity, bool>> predicate)
+        public async Task DeleteAsync(Expression<Func<User, bool>> predicate)
         {
             _ = await _users.DeleteOneAsync(predicate);
         }
 
-        public IQueryable<UserEntity> GetAll()
+        public IQueryable<User> GetAll()
         {
             return _users.AsQueryable();
         }
 
-        public async Task<UserEntity> GetSingleAsync(Expression<Func<UserEntity, bool>> predicate)
+        public async Task<User> GetSingleAsync(Expression<Func<User, bool>> predicate)
         {
-            var filter = Builders<UserEntity>.Filter.Where(predicate);
+            var filter = Builders<User>.Filter.Where(predicate);
             return (await _users.FindAsync(filter)).FirstOrDefault();
         }
 
-        public async Task<UserEntity> UpdateAsync(UserEntity obj)
+        public async Task<User> UpdateAsync(User obj)
         {
-            var filter = Builders<UserEntity>.Filter.Where(x => x.Id == obj.Id);
+            var filter = Builders<User>.Filter.Where(x => x.Id == obj.Id);
 
-            var updateDefBuilder = Builders<UserEntity>.Update;
-            var updateDef = updateDefBuilder.Combine(new UpdateDefinition<UserEntity>[]
+            var updateDefBuilder = Builders<User>.Update;
+            var updateDef = updateDefBuilder.Combine(new UpdateDefinition<User>[]
             {
                 updateDefBuilder.Set(x => x.Username, obj.Username),
                 updateDefBuilder.Set(x => x.Password, obj.Password),
@@ -74,7 +74,7 @@ namespace _0effort_crm_api.Core.Data.Repositories
             return await _users.FindOneAndReplaceAsync(x => x.Id == obj.Id, obj);
         }
 
-        Task IRepository<UserEntity>.UpdateAsync(UserEntity obj)
+        Task IRepository<User>.UpdateAsync(User obj)
         {
             throw new NotImplementedException();
         }

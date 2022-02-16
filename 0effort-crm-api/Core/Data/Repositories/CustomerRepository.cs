@@ -9,21 +9,21 @@ namespace _0effort_crm_api.Core.Data.Repositories
 {
     public class CustomerRepository : ICustomerRepository
     {
-        private readonly IMongoCollection<CustomerEntity> _customers;
+        private readonly IMongoCollection<Customer> _customers;
 
         public CustomerRepository(IMongoDatabase database)
         {
-            _customers = database.GetCollection<CustomerEntity>(MongoCollectionNames.Customers);
+            _customers = database.GetCollection<Customer>(MongoCollectionNames.Customers);
         }
 
-        public async Task<CustomerEntity> GetCustomerByIdAsync(string customerId)
+        public async Task<Customer> GetCustomerByIdAsync(string customerId)
         {
             return await GetSingleAsync(x => x.Id == customerId);
         }
 
         public async Task CreateCustomerAsync(CreateOrUpdateCustomerDto model)
         {
-            CustomerEntity customer = new()
+            Customer customer = new()
             {
                 FirstName = model.FirstName,
                 LastName = model.LastName,
@@ -38,9 +38,9 @@ namespace _0effort_crm_api.Core.Data.Repositories
             await AddAsync(customer);
         }
 
-        public async Task<CustomerEntity> UpdateCustomerAsync(string id, CreateOrUpdateCustomerDto model)
+        public async Task<Customer> UpdateCustomerAsync(string id, CreateOrUpdateCustomerDto model)
         {
-            CustomerEntity customer = new()
+            Customer customer = new()
             {
                 Id = id,
                 FirstName = model.FirstName,
@@ -64,33 +64,33 @@ namespace _0effort_crm_api.Core.Data.Repositories
 
         #region IRepository implementation
 
-        public async Task AddAsync(CustomerEntity obj)
+        public async Task AddAsync(Customer obj)
         {
             await _customers.InsertOneAsync(obj);
         }
 
-        public async Task DeleteAsync(Expression<Func<CustomerEntity, bool>> predicate)
+        public async Task DeleteAsync(Expression<Func<Customer, bool>> predicate)
         {
             _ = await _customers.DeleteOneAsync(predicate);
         }
 
-        public IQueryable<CustomerEntity> GetAll()
+        public IQueryable<Customer> GetAll()
         {
             return _customers.AsQueryable();
         }
 
-        public async Task<CustomerEntity> GetSingleAsync(Expression<Func<CustomerEntity, bool>> predicate)
+        public async Task<Customer> GetSingleAsync(Expression<Func<Customer, bool>> predicate)
         {
-            var filter = Builders<CustomerEntity>.Filter.Where(predicate);
+            var filter = Builders<Customer>.Filter.Where(predicate);
             return (await _customers.FindAsync(filter)).FirstOrDefault();
         }
 
-        public async Task<CustomerEntity> UpdateAsync(CustomerEntity obj)
+        public async Task<Customer> UpdateAsync(Customer obj)
         {
-            var filter = Builders<CustomerEntity>.Filter.Where(x => x.Id == obj.Id);
+            var filter = Builders<Customer>.Filter.Where(x => x.Id == obj.Id);
 
-            var updateDefBuilder = Builders<CustomerEntity>.Update;
-            var updateDef = updateDefBuilder.Combine(new UpdateDefinition<CustomerEntity>[]
+            var updateDefBuilder = Builders<Customer>.Update;
+            var updateDef = updateDefBuilder.Combine(new UpdateDefinition<Customer>[]
             {
                 updateDefBuilder.Set(x => x.FirstName, obj.FirstName),
                 updateDefBuilder.Set(x => x.LastName, obj.LastName),
@@ -106,7 +106,7 @@ namespace _0effort_crm_api.Core.Data.Repositories
             return await _customers.FindOneAndReplaceAsync(x => x.Id == obj.Id, obj);
         }
 
-        Task IRepository<CustomerEntity>.UpdateAsync(CustomerEntity obj)
+        Task IRepository<Customer>.UpdateAsync(Customer obj)
         {
             throw new NotImplementedException();
         }

@@ -12,31 +12,32 @@ namespace _0effort_crm_api.Auth
     {
         private readonly RequestDelegate _next;
         private readonly AppSettings _appSettings;
+        private readonly IUserRepository _db;
 
-        public JwtMiddleware(RequestDelegate next, IOptions<AppSettings> appSettings)
+        public JwtMiddleware(RequestDelegate next, IOptions<AppSettings> appSettings, IDataService ds)
         {
             _next = next;
             _appSettings = appSettings.Value;
-            //_db = ds.Users;
+            _db = ds.Users;
             
         }
 
-        public async Task Invoke(HttpContext context, IDataService ds)
+        public async Task Invoke(HttpContext context)
         {
             var token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
 
-            if (token != null)
-                AttachUserToContext(context, ds, token);
+            if (token != null) ValidateJwtToken(context, token);
+               // AttachUserToContext(context, ds, token);
 
             await _next(context);
         }
 
-        private void AttachUserToContext(HttpContext context, IDataService ds, string token)
+        private void ValidateJwtToken(HttpContext ctx, string token)
         {
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
             try
             {
-                var tokenHandler = new JwtSecurityTokenHandler();
-                var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
                 tokenHandler.ValidateToken(token, new TokenValidationParameters
                 {
                     ValidateIssuerSigningKey = true,
@@ -50,13 +51,12 @@ namespace _0effort_crm_api.Auth
                 var jwtToken = (JwtSecurityToken)validatedToken;
                 var userId = jwtToken.Claims.First(x => x.Type == "id").Value;
 
-                // attach user to context on successful jwt validation
-                context.Items["User"] = ds.Users.GetSingleAsync(x => x.Id == userId);
+                // return user id from JWT token if validation successful
+                ctx.Items["User"] = _db.GetSingleAsync(x => x.Id == userId);
             }
             catch
             {
-                // do nothing if jwt validation fails
-                // user is not attached to context so request won't have access to secure routes
+                // do nothing if validation fails
             }
         }
     }

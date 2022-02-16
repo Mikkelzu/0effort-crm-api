@@ -3,7 +3,7 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace _0effort_crm_api.Mongo.Entities;
 
-public class UserEntity
+public class User
 {
     [BsonId]
     [BsonRepresentation(BsonType.ObjectId)]

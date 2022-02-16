@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using _0effort_crm_api.Core;
-using _0effort_crm_api.Models;
 using _0effort_crm_api.Auth;
 using Microsoft.Extensions.Options;
 using _0effort_crm_api.Contracts.DTO;
@@ -15,38 +14,37 @@ using FluentValidation;
 namespace _0effort_crm_api.Controllers
 {
     [ApiController]
-    [Authorize]
     [Route("api/[controller]")]
     public class CustomerController : ControllerBase
     {
-
-        private readonly AppSettings _appSettings;
         private readonly ICustomerRepository _db;
         private readonly IValidator<CreateOrUpdateCustomerDto> _modelValidator;
 
-        public CustomerController(IOptions<AppSettings> appSettings, IDataService ds, IValidator<CreateOrUpdateCustomerDto> modelValidator)
+        public CustomerController(IDataService ds, IValidator<CreateOrUpdateCustomerDto> modelValidator)
         {
             _db = ds.Customers;
-            _appSettings = appSettings.Value;
             _modelValidator = modelValidator;
         }
 
 
         // GET: api/<CustomerController>
+        [Authorize]
         [HttpGet()]
-        public IEnumerable<CustomerEntity> Get()
+        public IEnumerable<Customer> Get()
         {
             return _db.GetAll();
         }
 
         // GET api/<CustomerController>/5
+        [Authorize]
         [HttpGet("{id}")]
-        public async Task<CustomerEntity> Get(string id)
+        public async Task<Customer> Get(string id)
         {
            return await _db.GetCustomerByIdAsync(id);
         }
 
         // POST api/<CustomerController>
+        [Authorize]
         [HttpPost]
         public async Task<BaseResponseModel> PostAsync([FromBody] CreateOrUpdateCustomerDto model)
         {
@@ -72,6 +70,7 @@ namespace _0effort_crm_api.Controllers
         }
 
         // PUT api/<CustomerController>/5
+        [Authorize]
         [HttpPut("{id}")]
         public async Task<CustomerResponseModel> Put(string id, [FromBody] CreateOrUpdateCustomerDto model)
         {
@@ -95,6 +94,7 @@ namespace _0effort_crm_api.Controllers
         }
 
         // DELETE api/<CustomerController>/5
+        [Authorize]
         [HttpDelete("{id}")]
         public async Task Delete(string id)
         {

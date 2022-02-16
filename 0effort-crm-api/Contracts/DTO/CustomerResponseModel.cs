@@ -4,6 +4,6 @@ namespace _0effort_crm_api.Contracts.DTO
 {
     public class CustomerResponseModel : BaseResponseModel
     {
-        public CustomerEntity Response { get; set; }
+        public Customer Response { get; set; }
     }
 }

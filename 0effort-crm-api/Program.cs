@@ -5,8 +5,7 @@ using _0effort_crm_api.Core;
 using _0effort_crm_api.Mongo.Validators;
 using _0effort_crm_api.Services;
 using FluentValidation;
-using Microsoft.EntityFrameworkCore;
-
+using Microsoft.IdentityModel.Logging;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,12 +22,12 @@ builder.Services.AddCors(p => p.AddPolicy("corsapp", builder =>
 // builder.Services.AddAutoMapper(typeof(Program));
 
 builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
-builder.Services.AddScoped<IDataService, DataService>();
+builder.Services.AddSingleton<IDataService, DataService>();
 
 builder.Services.Configure<DatabaseSettings>(builder.Configuration.GetSection("MongoConnection"));
 builder.Services.AddSingleton<MongoContext>();
 
-
+// Validator singleton services
 builder.Services.AddSingleton<IValidator<CreateOrUpdateCustomerDto>, CreateOrUpdateCustomerDtoValidator>();
 builder.Services.AddSingleton<IValidator<CreateOrUpdateUserDto>, CreateOrUpdateUserDtoValidator>();
 
@@ -58,6 +57,8 @@ app.UseAuthorization();
 
 app.UseMiddleware<ErrorHandlerMiddleware>();
 app.UseMiddleware<JwtMiddleware>();
+
+IdentityModelEventSource.ShowPII = true;
 
 app.MapControllers();
 

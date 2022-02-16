@@ -14,30 +14,39 @@ namespace _0effort_crm_api.Contracts.Repositories
     }
 
 
-    public interface ICustomerRepository : IRepository<CustomerEntity>
+    public interface ICustomerRepository : IRepository<Customer>
     {
-        Task<CustomerEntity> GetCustomerByIdAsync(string cutomerId);
+        Task<Customer> GetCustomerByIdAsync(string cutomerId);
 
         Task CreateCustomerAsync(CreateOrUpdateCustomerDto model);
 
-        Task<CustomerEntity> UpdateCustomerAsync(string id, CreateOrUpdateCustomerDto model);
+        Task<Customer> UpdateCustomerAsync(string id, CreateOrUpdateCustomerDto model);
 
         Task DeleteCustomerAsync(string id);
     }
 
-    public interface IUserRepository : IRepository<UserEntity>
+    public interface IUserRepository : IRepository<User>
     {
+        Task<User> GetUserByUsernamePasswordCombo(string username, string password);
 
-        Task<UserEntity> GetUserByUsernamePasswordCombo(string username, string password);
-
-        // todo create these methods better
-
-        Task<UserEntity> GetUserByIdAsync(string userId);
+        Task<User> GetUserByIdAsync(string userId);
 
         Task CreateUserAsync(CreateOrUpdateUserDto model);
 
         //Task<UserEntity> UpdateUserAsync(string id, CreateOrUpdateUserDto model);
 
-        //Task DeleteUserAsync(string id);
+        // Task DeleteUserAsync(string id);
+    }
+
+    public interface IOrderRepository : IRepository<Order>
+    {
+        Task CreateOrderAsync(CreateOrUpdateOrderDto model);
+        Task<Order> GetOrderByIdAsync(string orderId);
+
+        Task<Order[]> GetOrdersByMultipleIdsAsync(string[] orderIds);
+
+        Task DeleteOrderAsync(string orderId);
+
+        Task DeleteMultipleOrdersAsync(string[] orderIds);
     }
 }

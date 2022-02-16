@@ -8,6 +8,7 @@ namespace _0effort_crm_api.Services
     {
         public ICustomerRepository Customers { get; }
         public IUserRepository Users { get; }
+        public IOrderRepository Orders { get; }
     }
 
     public class DataService: IDataService
@@ -21,5 +22,6 @@ namespace _0effort_crm_api.Services
 
         public ICustomerRepository Customers => new CustomerRepository(_dbContext.Database);
         public IUserRepository Users => new UserRepository(_dbContext.Database);
+        public IOrderRepository Orders => new OrderRepository(_dbContext.Database);
     }
 }
