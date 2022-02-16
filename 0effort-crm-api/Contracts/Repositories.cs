@@ -32,9 +32,9 @@ namespace _0effort_crm_api.Contracts.Repositories
 
         // todo create these methods better
 
-        //Task<UserEntity> GetUserByIdAsync(string userId);
+        Task<UserEntity> GetUserByIdAsync(string userId);
 
-        //Task CreateUserAsync(CreateOrUpdateUserDto model);
+        Task CreateUserAsync(CreateOrUpdateUserDto model);
 
         //Task<UserEntity> UpdateUserAsync(string id, CreateOrUpdateUserDto model);
 

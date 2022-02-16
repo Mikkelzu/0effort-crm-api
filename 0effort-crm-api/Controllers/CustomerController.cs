@@ -15,6 +15,7 @@ using FluentValidation;
 namespace _0effort_crm_api.Controllers
 {
     [ApiController]
+    [Authorize]
     [Route("api/[controller]")]
     public class CustomerController : ControllerBase
     {
@@ -32,7 +33,6 @@ namespace _0effort_crm_api.Controllers
 
 
         // GET: api/<CustomerController>
-        [Authorize]
         [HttpGet()]
         public IEnumerable<CustomerEntity> Get()
         {
@@ -40,7 +40,6 @@ namespace _0effort_crm_api.Controllers
         }
 
         // GET api/<CustomerController>/5
-        [Authorize]
         [HttpGet("{id}")]
         public async Task<CustomerEntity> Get(string id)
         {
@@ -48,7 +47,6 @@ namespace _0effort_crm_api.Controllers
         }
 
         // POST api/<CustomerController>
-        [Authorize]
         [HttpPost]
         public async Task<BaseResponseModel> PostAsync([FromBody] CreateOrUpdateCustomerDto model)
         {
@@ -74,7 +72,6 @@ namespace _0effort_crm_api.Controllers
         }
 
         // PUT api/<CustomerController>/5
-        [Authorize]
         [HttpPut("{id}")]
         public async Task<CustomerResponseModel> Put(string id, [FromBody] CreateOrUpdateCustomerDto model)
         {
@@ -98,7 +95,6 @@ namespace _0effort_crm_api.Controllers
         }
 
         // DELETE api/<CustomerController>/5
-        [Authorize]
         [HttpDelete("{id}")]
         public async Task Delete(string id)
         {

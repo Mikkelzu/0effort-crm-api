@@ -73,6 +73,38 @@ namespace _0effort_crm_api.Controllers
         }
 
         [AllowAnonymous]
+        [HttpPost("register")]
+        public async Task<UserResponseModel> Register([FromBody] CreateOrUpdateUserDto model)
+        {
+            // todo create a validator for unique username & email
+            var result = _modelValidator.Validate(model);
+
+            if (!result.IsValid)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return new UserResponseModel
+                {
+                    IsSuccess = false,
+                    Errors = result.Errors.Select(x => x.ErrorMessage).ToArray()
+                };
+            }
+
+            await _db.CreateUserAsync(model);
+
+            return new UserResponseModel
+            {
+                IsSuccess = true
+            };
+        }
+
+
+        [HttpGet("user/{id}")]
+        public async Task<UserEntity> GetUserById(string id)
+        {
+            return await _db.GetUserByIdAsync(id);
+        }
+
+
         [HttpGet("users")]
         public IEnumerable<UserEntity> Get()
         {
