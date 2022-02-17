@@ -1,4 +1,6 @@
 # 0effort-crm-api
 the api for my own crm called 0effort
+## Techonologies
 
-## I will not be providing database files as of yet.
+MongoDB
+Net 6.0
