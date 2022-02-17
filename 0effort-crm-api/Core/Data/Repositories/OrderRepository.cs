@@ -37,6 +37,12 @@ namespace _0effort_crm_api.Core.Data.Repositories
             throw new NotImplementedException();
         }
 
+        public async Task<List<Order>> GetOrdersFromCustomerId(string customerId)
+        {
+            var orders = await _orders.FindAsync(x => x.CustomerId == customerId);
+            return orders.ToList<Order>();
+        }
+
         public Task<Order[]> GetOrdersByMultipleIdsAsync(string[] orderIds)
         {
             throw new NotImplementedException();

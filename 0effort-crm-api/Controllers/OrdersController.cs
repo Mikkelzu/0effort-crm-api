@@ -52,6 +52,13 @@ namespace _0effort_crm_api.Controllers
             };
         }
 
+        // GET api/<OrdersController>/customer/1
+        [HttpGet("customer/{customerId}")]
+        public async Task<List<Order>> GetAllByCustomerId(string customerId)
+        {
+            return await _db.GetOrdersFromCustomerId(customerId);
+        }
+
         // PUT api/<OrdersController>/5
         [HttpPut("{id}")]
         public void Put(int id, [FromBody] string value)

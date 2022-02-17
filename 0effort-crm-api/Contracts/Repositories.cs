@@ -41,7 +41,10 @@ namespace _0effort_crm_api.Contracts.Repositories
     public interface IOrderRepository : IRepository<Order>
     {
         Task CreateOrderAsync(CreateOrUpdateOrderDto model);
+
         Task<Order> GetOrderByIdAsync(string orderId);
+
+        Task<List<Order>> GetOrdersFromCustomerId(string customerId);
 
         Task<Order[]> GetOrdersByMultipleIdsAsync(string[] orderIds);
 
