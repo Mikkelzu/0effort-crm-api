@@ -22,7 +22,7 @@ namespace _0effort_crm_api.Core.Data.Repositories
             {
                 OrderDate = model.OrderDate,
                 OrderDescription = model.OrderDescription,
-                CustomerId = model.Customer.Id,
+                CustomerId = model.CustomerId,
                 DeliveryAddress = model.DeliveryAddress,
                 DeliveryPostcode = model.DeliveryPostcode,
                 DeliveryCity = model.DeliveryCity,

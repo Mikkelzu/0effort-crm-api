@@ -26,6 +26,8 @@ namespace _0effort_crm_api.Core.Data.Repositories
             return await GetSingleAsync(x => x.Id == userId);
         }
 
+
+
         public async Task CreateUserAsync(CreateOrUpdateUserDto model)
         {
             User user = new()

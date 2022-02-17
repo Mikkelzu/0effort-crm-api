@@ -8,7 +8,7 @@ namespace _0effort_crm_api.Contracts.DTO
     {
         public DateTime OrderDate { get; set; }
         public string OrderDescription { get; set; }
-        public Customer Customer { get; set; }
+        public string CustomerId { get; set; }
 
         /**
          * Optionals?

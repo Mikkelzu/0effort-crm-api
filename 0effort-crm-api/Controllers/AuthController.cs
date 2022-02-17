@@ -2,7 +2,6 @@
 using _0effort_crm_api.Contracts.DTO;
 using _0effort_crm_api.Contracts.Repositories;
 using _0effort_crm_api.Core;
-using _0effort_crm_api.Models;
 using _0effort_crm_api.Mongo.Entities;
 using _0effort_crm_api.Services;
 using FluentValidation;
