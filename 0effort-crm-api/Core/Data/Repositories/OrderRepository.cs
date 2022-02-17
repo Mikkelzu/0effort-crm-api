@@ -2,6 +2,7 @@
 using _0effort_crm_api.Contracts.DTO;
 using _0effort_crm_api.Contracts.Repositories;
 using _0effort_crm_api.Mongo.Entities;
+using _0effort_crm_api.Util;
 using MongoDB.Driver;
 using System.Linq.Expressions;
 
@@ -23,6 +24,7 @@ namespace _0effort_crm_api.Core.Data.Repositories
                 OrderDate = model.OrderDate,
                 OrderDescription = model.OrderDescription,
                 CustomerId = model.CustomerId,
+                OrderStatus = model.OrderStatus,
                 DeliveryAddress = model.DeliveryAddress,
                 DeliveryPostcode = model.DeliveryPostcode,
                 DeliveryCity = model.DeliveryCity,

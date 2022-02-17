@@ -1,4 +1,5 @@
-﻿using MongoDB.Bson;
+﻿using _0effort_crm_api.Util;
+using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
 namespace _0effort_crm_api.Mongo.Entities
@@ -11,6 +12,8 @@ namespace _0effort_crm_api.Mongo.Entities
         public DateTime OrderDate { get; set; }
         public string OrderDescription { get; set; }
         public string CustomerId { get; set; }
+
+        public OrderStatus OrderStatus { get; set; }
 
         /**
          * Optionals?

@@ -56,7 +56,14 @@ namespace _0effort_crm_api.Controllers
         [HttpGet("customer/{customerId}")]
         public async Task<List<Order>> GetAllByCustomerId(string customerId)
         {
-            return await _db.GetOrdersFromCustomerId(customerId);
+            var orders =  await _db.GetOrdersFromCustomerId(customerId);
+
+            if (orders.Count == 0)
+            {
+                return new List<Order>();
+            }
+
+            return orders;
         }
 
         // PUT api/<OrdersController>/5
