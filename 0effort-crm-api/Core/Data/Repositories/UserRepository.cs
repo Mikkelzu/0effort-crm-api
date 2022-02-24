@@ -18,7 +18,7 @@ namespace _0effort_crm_api.Core.Data.Repositories
 
         public async Task<User> GetUserByUsernamePasswordCombo(string username, string password)
         {
-            return await GetSingleAsync(x => x.Username == username && x.Password == password);
+            return await GetSingleAsync(x => x.Username == username);
         }
 
         public async Task<User> GetUserByIdAsync(string userId)
@@ -26,7 +26,17 @@ namespace _0effort_crm_api.Core.Data.Repositories
             return await GetSingleAsync(x => x.Id == userId);
         }
 
+        public async Task<User> UpdateUserAsync(string id, CreateOrUpdateUserDto model)
+        {
+            User user = new()
+            {
+                Id = id,
+                Username = model.Username,
+                Password = model.Password
+            };
 
+            return await UpdateAsync(user);
+        }
 
         public async Task CreateUserAsync(CreateOrUpdateUserDto model)
         {
@@ -80,7 +90,6 @@ namespace _0effort_crm_api.Core.Data.Repositories
         {
             throw new NotImplementedException();
         }
-
         #endregion
     }
 }

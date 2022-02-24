@@ -33,7 +33,7 @@ namespace _0effort_crm_api.Contracts.Repositories
 
         Task CreateUserAsync(CreateOrUpdateUserDto model);
 
-        //Task<UserEntity> UpdateUserAsync(string id, CreateOrUpdateUserDto model);
+        Task<User> UpdateUserAsync(string id, CreateOrUpdateUserDto model);
 
         // Task DeleteUserAsync(string id);
     }
